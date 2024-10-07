@@ -20,78 +20,76 @@
     <link rel="stylesheet" href="TemplateData/style.css" />
     <link rel="icon" href="TemplateData/favicon.png" />
     <link rel="apple-touch-icon" href="TemplateData/ios_icon.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
   </head>
   <body>
     <div id="unity-container">
       <canvas id="unity-canvas"></canvas>
-    </div>
-    <div id="loading-cover">
-      <div id="unity-loading-bar">
-        <div id="unity-logo">
-          <img src="TemplateData/logo.png" alt="Logo" />
+      <div id="loading-cover">
+        <div id="unity-loading-bar">
+          <div id="unity-logo">
+            <img src="TemplateData/logo.png" alt="Logo" />
+          </div>
+          <div id="unity-progress-bar-empty">
+            <div id="unity-progress-bar-full"></div>
+          </div>
         </div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-        <div class="spinner"></div>
       </div>
     </div>
     <script>
-            const buildUrl = "Build";
-            const loaderUrl = buildUrl + "/3DURP.loader.js";
-            const config = {
+            window.addEventListener("load", function () {
+              if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("ServiceWorker.js");
+              }
+            });
+
+            var container = document.querySelector("#unity-container");
+            var canvas = document.querySelector("#unity-canvas");
+            var loadingBar = document.querySelector("#unity-loading-bar");
+            var progressBarFull = document.querySelector("#unity-progress-bar-full");
+
+            var buildUrl = "Build";
+            var loaderUrl = buildUrl + "/3DURP.loader.js";
+            var config = {
+              arguments: [],
               dataUrl: buildUrl + "/3DURP.data.unityweb",
               frameworkUrl: buildUrl + "/3DURP.framework.js.unityweb",
               codeUrl: buildUrl + "/3DURP.wasm.unityweb",
               streamingAssetsUrl: "StreamingAssets",
               companyName: "meangpu",
               productName: "U.Base3DURP",
-              productVersion: "0.64-8-Oct-2024 12:10 AM",
+              productVersion: "0.65-8-Oct-2024 12:32 AM",
             };
 
-            const container = document.querySelector("#unity-container");
-            const canvas = document.querySelector("#unity-canvas");
-            const loadingCover = document.querySelector("#loading-cover");
-            const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
-            const progressBarFull = document.querySelector("#unity-progress-bar-full");
-            const spinner = document.querySelector('.spinner');
+            // By default Unity keeps WebGL canvas render target size matched with
+            // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+            // Set this to false if you want to decouple this synchronization from
+            // happening inside the engine, and you would instead like to size up
+            // the canvas DOM size and WebGL render target sizes yourself.
+            // config.matchWebGLToCanvasSize = false;
 
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
             if (isMobile) {
-              container.className = "unity-mobile";
+              // this make game blur
+              // but prevent iphone safari home screen to broken when change orientation
               config.devicePixelRatio = 1;
             }
 
+            loadingBar.style.display = "";
 
-
-            loadingCover.style.display = "";
-
-            const script = document.createElement("script");
+            var script = document.createElement("script");
             script.src = loaderUrl;
             script.onload = () => {
               createUnityInstance(canvas, config, (progress) => {
-                spinner.style.display = "none";
-                progressBarEmpty.style.display = "";
-                progressBarFull.style.width = `${100 * progress}%`;
+                progressBarFull.style.width = 100 * progress + "%";
               }).then((unityInstance) => {
-                loadingCover.style.display = "none";
+                loadingBar.style.display = "none";
               }).catch((message) => {
                 alert(message);
               });
             };
-
             document.body.appendChild(script);
-
-            function handleResize() {
-              const canvas = document.querySelector("#unity-canvas");
-              canvas.width = window.innerWidth;
-              canvas.height = window.innerHeight;
-            }
-
-            window.addEventListener('resize', handleResize);
-            window.addEventListener('orientationchange', handleResize);
-            handleResize();
     </script>
   </body>
 </html>
