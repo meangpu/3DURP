@@ -23,12 +23,7 @@
   </head>
   <body>
     <div id="unity-container">
-      <canvas
-        id="unity-canvas"
-        width="1920"
-        height="1080"
-        tabindex="-1"
-      ></canvas>
+      <canvas id="unity-canvas"></canvas>
     </div>
     <div id="loading-cover">
       <div id="unity-loading-bar">
@@ -51,7 +46,7 @@
               streamingAssetsUrl: "StreamingAssets",
               companyName: "meangpu",
               productName: "U.Base3DURP",
-              productVersion: "0.62-7-Oct-2024 11:44 PM",
+              productVersion: "0.64-8-Oct-2024 12:10 AM",
             };
 
             const container = document.querySelector("#unity-container");
@@ -60,8 +55,13 @@
             const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
             const progressBarFull = document.querySelector("#unity-progress-bar-full");
             const spinner = document.querySelector('.spinner');
-            // const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            // if(isMobile) {}
+
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+            if (isMobile) {
+              container.className = "unity-mobile";
+              config.devicePixelRatio = 1;
+            }
 
 
 
