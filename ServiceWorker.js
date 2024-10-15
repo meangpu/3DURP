@@ -1,4 +1,4 @@
-const cacheName = "meangpu-U.Base3DURP-0.66-8-Oct-2024 12:43 AM";
+const cacheName = "meangpu-U.Base3DURP-0.68-15-Oct-2024 3:54 PM";
 const contentToCache = [
     "Build/3DURP.loader.js",
     "Build/3DURP.framework.js.unityweb",
